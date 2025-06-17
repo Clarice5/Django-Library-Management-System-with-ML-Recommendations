@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 
 from pathlib import Path
 from django.contrib.messages import constants as messages
+import os
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -27,7 +28,7 @@ SECRET_KEY = 'django-insecure-ly*wg-6!#9hq6fcini%_9q)0plt_e)-=qo27pw2xg2ek_b4t=_
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['192.168.43.116','127.0.0.1','192.168.30.139']
+ALLOWED_HOSTS = ['192.168.43.116','127.0.0.1','192.168.30.139','192.168.217.139','*']
 
 
 # Application definition
