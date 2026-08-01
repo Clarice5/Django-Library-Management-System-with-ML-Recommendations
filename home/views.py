@@ -5,6 +5,7 @@ from django.contrib import messages
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 from django.db.models import Q
+import requests
 
 # Create your views here.
 def index(request):
@@ -111,3 +112,68 @@ def return_book(request,book_id):
         return redirect('/books')
 
     return redirect('/books')
+
+def add_book(request):
+    if request.method == "POST":
+        title = request.POST.get("title")
+        author = request.POST.get("author")
+        isbn = request.POST.get("isbn")
+        category = request.POST.get("category")
+        location = request.POST.get("location")
+
+        Book.objects.create(
+        title=title,
+        author=author,
+        isbn=isbn,
+        category=category,
+        location=location
+)
+        messages.success(request, "Book added successfully!")
+        return redirect("books_list")
+    context = {}
+
+    isbn = request.GET.get("isbn")
+
+    if isbn:
+
+        url = f"https://openlibrary.org/api/books?bibkeys=ISBN:{isbn}&format=json&jscmd=data"
+
+        #response = requests.get(url)
+        print("Calling Open Library...")
+        response = requests.get(url, timeout=5)
+        print("Response received")
+        if response.status_code == 200:
+
+            data = response.json()
+
+            book = data.get(f"ISBN:{isbn}")
+
+            if book:
+
+                title = book.get("title")
+                print(title)
+
+                authors = book.get("authors", [])
+                author = authors[0]["name"] if authors else "Unknown"
+
+                publishers = book.get("publishers", [])
+                publisher = publishers[0]["name"] if publishers else "Unknown"
+                print(author)
+                print(publisher)
+                publish_date = book.get("publish_date", "Unknown")
+                print(publish_date)
+                context = {
+                "title": title,
+                "author": author,
+                "publisher": publisher,
+                "publish_date": publish_date,
+                "isbn":isbn
+                    }
+            else:
+                print("Book not found.")
+
+        else:
+            print("Error:", response.status_code)
+            print(response.text)
+
+    return render(request, "add_book.html", context)

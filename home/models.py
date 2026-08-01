@@ -23,7 +23,7 @@ class Book(models.Model):
     
     title=models.CharField(max_length=122)
     author=models.CharField(max_length=122)
-    isbn=models.IntegerField(max_length=12,unique=True)
+    isbn = models.CharField(max_length=13, unique=True)
     category=models.CharField(max_length=122)
     location=models.CharField(max_length=122)
     status=models.CharField(max_length=10,choices=STATUS_CHOICES,default='available')
