@@ -1,0 +1,155 @@
+{% extends 'base.html' %}
+
+{% block title %}Delete Book{% endblock %}
+
+{% block body %}
+
+<style>
+
+    .delete-container {
+        max-width: 550px;
+        margin: 70px auto;
+    }
+
+    .delete-card {
+        background: rgba(255,255,255,0.06);
+        border: 1px solid rgba(255,255,255,0.12);
+        border-radius: 20px;
+        padding: 40px;
+        text-align: center;
+
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+
+        box-shadow:
+            0 15px 35px rgba(0,0,0,0.25);
+    }
+
+    .warning-icon {
+        font-size: 55px;
+        margin-bottom: 15px;
+    }
+
+    .delete-card h2 {
+        margin-bottom: 12px;
+        font-weight: 600;
+    }
+
+    .delete-message {
+        color: rgba(255,255,255,0.6);
+        margin-bottom: 25px;
+    }
+
+    .book-info {
+        background: rgba(255,255,255,0.05);
+        border-radius: 12px;
+        padding: 18px;
+        text-align: left;
+        margin-bottom: 25px;
+    }
+
+    .book-info p {
+        margin-bottom: 8px;
+    }
+
+    .book-info p:last-child {
+        margin-bottom: 0;
+    }
+
+    .book-info strong {
+        color: rgba(255,255,255,0.65);
+    }
+
+    .book-info span {
+        color: white;
+    }
+
+    .delete-actions {
+        display: flex;
+        justify-content: center;
+        gap: 12px;
+    }
+
+</style>
+
+
+<div class="container page-container">
+
+    <div class="delete-container">
+
+        <div class="delete-card">
+
+            <div class="warning-icon">
+                ⚠️
+            </div>
+
+            <h2>Delete Book?</h2>
+
+            <p class="delete-message">
+                Are you sure you want to permanently delete this book?
+            </p>
+
+
+            <!-- BOOK INFORMATION -->
+
+            <div class="book-info">
+
+                <p>
+                    <strong>Title:</strong>
+                    <span>{{ book.title }}</span>
+                </p>
+
+                <p>
+                    <strong>Author:</strong>
+                    <span>{{ book.author }}</span>
+                </p>
+
+                <p>
+                    <strong>Category:</strong>
+                    <span>{{ book.category }}</span>
+                </p>
+
+                <p>
+                    <strong>Location:</strong>
+                    <span>{{ book.location }}</span>
+                </p>
+
+            </div>
+
+
+            <!-- ACTIONS -->
+
+            <div class="delete-actions">
+
+                <a
+                    href="{% url 'books_list' %}"
+                    class="btn btn-secondary">
+
+                    Cancel
+
+                </a>
+
+
+                <form method="POST">
+
+                    {% csrf_token %}
+
+                    <button
+                        type="submit"
+                        class="btn btn-danger">
+
+                        🗑 Yes, Delete
+
+                    </button>
+
+                </form>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

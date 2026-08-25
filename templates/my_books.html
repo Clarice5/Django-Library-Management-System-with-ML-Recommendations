@@ -1,0 +1,342 @@
+{% extends 'base.html' %}
+
+{% block title %}My Books{% endblock %}
+
+{% block body %}
+
+<style>
+
+    .my-books-header {
+        text-align: center;
+        margin-bottom: 35px;
+    }
+
+    .my-books-header h2 {
+        font-size: 32px;
+        font-weight: 600;
+        margin-bottom: 8px;
+    }
+
+    .my-books-header p {
+        color: rgba(255,255,255,0.6);
+    }
+
+
+    .my-books-grid {
+        display: grid;
+
+        grid-template-columns:
+            repeat(auto-fill, minmax(250px, 1fr));
+
+        gap: 25px;
+    }
+
+
+    .my-book-card {
+
+        background: rgba(255,255,255,0.06);
+
+        border: 1px solid rgba(255,255,255,0.12);
+
+        border-radius: 18px;
+
+        overflow: hidden;
+
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+
+        box-shadow:
+            0 15px 35px rgba(0,0,0,0.25);
+
+        transition: 0.3s;
+    }
+
+
+    .my-book-card:hover {
+
+        transform: translateY(-5px);
+
+        background: rgba(255,255,255,0.09);
+
+        box-shadow:
+            0 20px 40px rgba(0,0,0,0.35);
+    }
+
+
+    .my-book-cover {
+
+        width: 100%;
+        height: 270px;
+
+        object-fit: cover;
+
+        display: block;
+    }
+
+
+    .no-cover {
+
+        height: 270px;
+
+        display: flex;
+
+        align-items: center;
+        justify-content: center;
+
+        background: rgba(255,255,255,0.04);
+
+        font-size: 50px;
+
+        color: rgba(255,255,255,0.4);
+    }
+
+
+    .my-book-info {
+
+        padding: 20px;
+    }
+
+
+    .my-book-title {
+
+        font-size: 20px;
+
+        font-weight: 600;
+
+        margin-bottom: 15px;
+    }
+
+
+    .book-detail {
+
+        display: flex;
+
+        justify-content: space-between;
+
+        margin-bottom: 9px;
+
+        font-size: 13px;
+    }
+
+
+    .detail-label {
+
+        color: rgba(255,255,255,0.5);
+    }
+
+
+    .detail-value {
+
+        color: rgba(255,255,255,0.85);
+
+        text-align: right;
+    }
+
+
+    .status-issued {
+
+        color: #86efac;
+
+        font-weight: 600;
+    }
+
+
+    .status-returned {
+
+        color: rgba(255,255,255,0.5);
+
+        font-weight: 600;
+    }
+
+
+    .fine {
+
+        color: #fca5a5;
+
+        font-weight: 600;
+    }
+
+
+    .no-books {
+
+        text-align: center;
+
+        padding: 80px 20px;
+
+        color: rgba(255,255,255,0.5);
+    }
+
+
+    .no-books-icon {
+
+        font-size: 60px;
+
+        margin-bottom: 15px;
+    }
+
+</style>
+
+
+<div class="container page-container">
+
+
+    <!-- HEADER -->
+
+    <div class="my-books-header">
+
+        <h2>📖 My Books</h2>
+
+        <p>
+            Books you have borrowed from the library
+        </p>
+
+    </div>
+
+
+    <!-- BOOK GRID -->
+
+    {% if issues %}
+
+        <div class="my-books-grid">
+
+            {% for issue in issues %}
+
+                <div class="my-book-card">
+
+
+                    <!-- BOOK COVER -->
+
+                    {% if issue.book.cover_url %}
+
+                        <img
+                            src="{{ issue.book.cover_url }}"
+                            alt="{{ issue.book.title }}"
+                            class="my-book-cover"
+                        >
+
+                    {% else %}
+
+                        <div class="no-cover">
+                            📖
+                        </div>
+
+                    {% endif %}
+
+
+                    <!-- BOOK INFORMATION -->
+
+                    <div class="my-book-info">
+
+                        <div class="my-book-title">
+                            {{ issue.book.title }}
+                        </div>
+
+
+                        <div class="book-detail">
+
+                            <span class="detail-label">
+                                Issue Date
+                            </span>
+
+                            <span class="detail-value">
+                                {{ issue.issue_date }}
+                            </span>
+
+                        </div>
+
+
+                        <div class="book-detail">
+
+                            <span class="detail-label">
+                                Due Date
+                            </span>
+
+                            <span class="detail-value">
+                                {{ issue.return_date }}
+                            </span>
+
+                        </div>
+
+
+                        <div class="book-detail">
+
+                            <span class="detail-label">
+                                Status
+                            </span>
+
+                            <span class="detail-value">
+
+                                {% if issue.returned %}
+
+                                    <span class="status-returned">
+                                        ✓ Returned
+                                    </span>
+
+                                {% else %}
+
+                                    <span class="status-issued">
+                                        ● Currently Issued
+                                    </span>
+
+                                {% endif %}
+
+                            </span>
+
+                        </div>
+
+
+                        <div class="book-detail">
+
+                            <span class="detail-label">
+                                Fine
+                            </span>
+
+                            <span class="detail-value">
+
+                                {% if issue.fine > 0 %}
+
+                                    <span class="fine">
+                                        ₹{{ issue.fine }}
+                                    </span>
+
+                                {% else %}
+
+                                    ₹0
+
+                                {% endif %}
+
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            {% endfor %}
+
+        </div>
+
+
+    {% else %}
+
+        <div class="no-books">
+
+            <div class="no-books-icon">
+                📚
+            </div>
+
+            <h4>No books yet</h4>
+
+            <p>
+                You haven't borrowed any books from the library.
+            </p>
+
+        </div>
+
+    {% endif %}
+
+
+</div>
+
+{% endblock %}

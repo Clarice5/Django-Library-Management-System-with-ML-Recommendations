@@ -1,0 +1,248 @@
+{% extends 'base.html' %}
+
+{% block title %}Upload Books{% endblock %}
+
+{% block body %}
+
+<style>
+
+    .upload-container {
+        max-width: 700px;
+        margin: 40px auto;
+    }
+
+    .upload-header {
+        text-align: center;
+        margin-bottom: 35px;
+    }
+
+    .upload-header h2 {
+        font-size: 32px;
+        font-weight: 600;
+        margin-bottom: 8px;
+    }
+
+    .upload-header p {
+        color: rgba(255,255,255,0.6);
+    }
+
+
+    .upload-card {
+
+        background: rgba(255,255,255,0.06);
+
+        border: 1px solid rgba(255,255,255,0.12);
+
+        border-radius: 20px;
+
+        padding: 35px;
+
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+
+        box-shadow:
+            0 15px 35px rgba(0,0,0,0.25);
+    }
+
+
+    .upload-icon {
+
+        text-align: center;
+
+        font-size: 55px;
+
+        margin-bottom: 20px;
+    }
+
+
+    .file-area {
+
+        border: 2px dashed rgba(255,255,255,0.20);
+
+        border-radius: 14px;
+
+        padding: 35px 20px;
+
+        text-align: center;
+
+        margin-bottom: 25px;
+
+        transition: 0.25s;
+    }
+
+
+    .file-area:hover {
+
+        border-color: rgba(255,255,255,0.40);
+
+        background: rgba(255,255,255,0.04);
+    }
+
+
+    .file-area input {
+
+        color: rgba(255,255,255,0.75);
+
+        max-width: 100%;
+    }
+
+
+    .format-box {
+
+        background: rgba(255,255,255,0.05);
+
+        border-radius: 12px;
+
+        padding: 18px;
+
+        margin-bottom: 25px;
+    }
+
+
+    .format-box h5 {
+
+        font-size: 15px;
+
+        margin-bottom: 12px;
+    }
+
+
+    .format-box p {
+
+        margin: 0;
+
+        color: rgba(255,255,255,0.55);
+
+        font-size: 13px;
+
+        line-height: 1.7;
+    }
+
+
+    .upload-btn {
+
+        width: 100%;
+
+        height: 48px;
+
+        border: none;
+
+        border-radius: 10px;
+
+        background: white;
+
+        color: #111827;
+
+        font-weight: 600;
+
+        transition: 0.25s;
+    }
+
+
+    .upload-btn:hover {
+
+        transform: translateY(-2px);
+
+        box-shadow:
+            0 8px 20px rgba(0,0,0,0.25);
+    }
+
+</style>
+
+
+<div class="container page-container">
+
+    <div class="upload-container">
+
+
+        <!-- HEADER -->
+
+        <div class="upload-header">
+
+            <h2>📂 Upload Books</h2>
+
+            <p>
+                Add multiple books to your library using an Excel file
+            </p>
+
+        </div>
+
+
+        <!-- CARD -->
+
+        <div class="upload-card">
+
+
+            <div class="upload-icon">
+                📊
+            </div>
+
+
+            <form
+                method="POST"
+                enctype="multipart/form-data">
+
+                {% csrf_token %}
+
+
+                <!-- FILE -->
+
+                <div class="file-area">
+
+                    <p>
+                        Select your Excel file
+                    </p>
+
+                    <input
+                        type="file"
+                        name="books"
+                        accept=".xlsx"
+                        required>
+
+                </div>
+
+
+                <!-- FORMAT -->
+
+                <div class="format-box">
+
+                    <h5>
+                        📋 Required Excel format
+                    </h5>
+
+                    <p>
+                        Your Excel file should contain these columns
+                        in this order:
+                    </p>
+
+                    <p>
+                        <strong>
+                            Title &nbsp; | &nbsp;
+                            Author &nbsp; | &nbsp;
+                            ISBN &nbsp; | &nbsp;
+                            Category &nbsp; | &nbsp;
+                            Location
+                        </strong>
+                    </p>
+
+                </div>
+
+
+                <button
+                    type="submit"
+                    class="upload-btn">
+
+                    ⬆ Upload Books
+
+                </button>
+
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

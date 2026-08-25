@@ -1,0 +1,160 @@
+{% extends 'base.html' %}
+
+{% block title %}Reviews{% endblock %}
+
+{% block body %}
+
+<style>
+
+    .reviews-container {
+        max-width: 850px;
+        margin: 45px auto;
+    }
+
+    .reviews-header {
+        text-align: center;
+        margin-bottom: 30px;
+    }
+
+    .reviews-header h2 {
+        font-size: 32px;
+        font-weight: 600;
+        margin-bottom: 8px;
+    }
+
+    .reviews-header p {
+        color: rgba(255,255,255,0.6);
+    }
+
+    .reviews-card {
+        background: rgba(255,255,255,0.06);
+        border: 1px solid rgba(255,255,255,0.12);
+        border-radius: 18px;
+        padding: 25px;
+        margin-bottom: 18px;
+
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+
+        box-shadow: 0 10px 25px rgba(0,0,0,0.20);
+    }
+
+    .review-user {
+        font-weight: 600;
+        margin-bottom: 6px;
+    }
+
+    .review-rating {
+        margin-bottom: 10px;
+        font-size: 15px;
+    }
+
+    .review-comment {
+        color: rgba(255,255,255,0.75);
+        line-height: 1.6;
+        margin-bottom: 8px;
+    }
+
+    .review-date {
+        color: rgba(255,255,255,0.4);
+        font-size: 12px;
+    }
+
+    .no-reviews {
+        text-align: center;
+        padding: 40px;
+        color: rgba(255,255,255,0.55);
+    }
+
+</style>
+
+
+<div class="container page-container">
+
+    <div class="reviews-container">
+
+        <div class="reviews-header">
+
+    <h2>💬 Reviews</h2>
+
+    <p>
+        What readers think about
+        <strong>{{ book.title }}</strong>
+    </p>
+
+    {% if review_count > 0 %}
+
+        <div style="margin-top: 12px; font-size: 18px;">
+            ⭐ {{ average_rating|floatformat:1 }}
+            <span style="color: rgba(255,255,255,0.5);">
+                · {{ review_count }} review{{ review_count|pluralize }}
+            </span>
+        </div>
+
+    {% else %}
+
+        <div style="color: rgba(255,255,255,0.5); margin-top: 12px;">
+            No ratings yet
+        </div>
+
+    {% endif %}
+
+</div>
+
+
+        {% for review in reviews %}
+
+            <div class="reviews-card">
+
+                <div class="review-user">
+                    👤 {{ review.user.username }}
+                </div>
+
+
+                <div class="review-rating">
+
+                    {% if review.rating == 5 %}
+                        ⭐⭐⭐⭐⭐
+                    {% elif review.rating == 4 %}
+                        ⭐⭐⭐⭐
+                    {% elif review.rating == 3 %}
+                        ⭐⭐⭐
+                    {% elif review.rating == 2 %}
+                        ⭐⭐
+                    {% else %}
+                        ⭐
+                    {% endif %}
+
+                </div>
+
+
+                <div class="review-comment">
+                    {{ review.comment }}
+                </div>
+
+
+                <div class="review-date">
+                    {{ review.created_at|date:"d M Y" }}
+                </div>
+
+            </div>
+
+        {% empty %}
+
+            <div class="reviews-card no-reviews">
+
+                <h5>No reviews yet</h5>
+
+                <p>
+                    Be the first person to review this book!
+                </p>
+
+            </div>
+
+        {% endfor %}
+
+    </div>
+
+</div>
+
+{% endblock %}

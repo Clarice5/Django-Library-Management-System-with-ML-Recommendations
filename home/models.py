@@ -27,7 +27,7 @@ class Book(models.Model):
     category=models.CharField(max_length=122)
     location=models.CharField(max_length=122)
     status=models.CharField(max_length=10,choices=STATUS_CHOICES,default='available')
-
+    cover_url=models.URLField(blank=True, null=True)
     def __str__(self):
         return f"{self.title} by {self.author}"
     
@@ -39,6 +39,24 @@ class BookIssue(models.Model):
     issue_date = models.DateField(auto_now_add=True)
     return_date = models.DateField(default=default_return_date)
     returned = models.BooleanField(default=False)
+    fine = models.IntegerField(default=0)
+
+    def __str__(self):
+        return f"{self.user.username} - {self.book.title}"
+
+class Review(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+
+    book = models.ForeignKey(
+        Book,
+        on_delete=models.CASCADE,
+        related_name="reviews"
+    )
+
+    rating = models.IntegerField()
+    comment = models.TextField()
+
+    created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return f"{self.user.username} - {self.book.title}"

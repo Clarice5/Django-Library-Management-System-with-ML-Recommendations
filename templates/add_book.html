@@ -1,72 +1,533 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Add Book</title>
-</head>
-<body>
+{% extends 'base.html' %}
 
-    <h1>Add Book</h1>
+{% block title %}Add Book{% endblock %}
 
-    <form method="GET">
+{% block body %}
 
-        <label for="isbn">Enter ISBN:</label><br><br>
+<style>
 
-        <input
-            type="text"
-            id="isbn"
-            name="isbn"
-            placeholder="Enter ISBN">
+    .add-book-container {
+        max-width: 850px;
+        margin: 30px auto;
+    }
 
-        <br><br>
 
-        <button type="submit">
-            Fetch Details
-        </button>
+    .page-heading {
+        text-align: center;
+        margin-bottom: 35px;
+    }
 
-    </form>
-    {%if title%}
-    <table border="1">
-    <tr>
-        <th>Title</th>
-        <td>{{ title }}</td>
-    </tr>
 
-    <tr>
-        <th>Author</th>
-        <td>{{ author }}</td>
-    </tr>
+    .page-heading h2 {
+        font-size: 32px;
+        font-weight: 600;
+        margin-bottom: 8px;
+    }
 
-    <tr>
-        <th>Publisher</th>
-        <td>{{ publisher }}</td>
-    </tr>
 
-    <tr>
-        <th>Publish Date</th>
-        <td>{{ publish_date }}</td>
-    </tr>
-    </table>
-    <form method="POST">
+    .page-heading p {
+        color: rgba(255,255,255,0.6);
+    }
 
-    {% csrf_token %}
-    <input type="hidden" name="title" value="{{ title }}">
-    <input type="hidden" name="author" value="{{ author }}">
-    <input type="hidden" name="isbn" value="{{ isbn }}">
 
-    <label>Category:</label>
-    <input type="text" name="category" required>
+    /* ISBN SEARCH CARD */
 
-    <br><br>
+    .isbn-card {
 
-    <label>Location:</label>
-    <input type="text" name="location" required>
+        background: rgba(255,255,255,0.06);
 
-    <br><br>
+        border: 1px solid rgba(255,255,255,0.12);
 
-    <button type="submit">Save Book</button>
+        border-radius: 18px;
 
-</form>
-    {%endif%}
-    
-</body>
-</html>
+        padding: 30px;
+
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+
+        box-shadow:
+            0 15px 35px rgba(0,0,0,0.25);
+
+        margin-bottom: 25px;
+    }
+
+
+    .section-title {
+
+        font-size: 18px;
+
+        font-weight: 600;
+
+        margin-bottom: 20px;
+    }
+
+
+    .isbn-form {
+
+        display: flex;
+
+        gap: 10px;
+    }
+
+
+    .isbn-input {
+
+        flex: 1;
+
+        height: 48px;
+
+        background: rgba(255,255,255,0.07);
+
+        border: 1px solid rgba(255,255,255,0.15);
+
+        border-radius: 10px;
+
+        color: white;
+
+        padding: 0 15px;
+    }
+
+
+    .isbn-input::placeholder {
+
+        color: rgba(255,255,255,0.5);
+    }
+
+
+    .isbn-input:focus {
+
+        outline: none;
+
+        border-color: rgba(255,255,255,0.4);
+
+        background: rgba(255,255,255,0.10);
+    }
+
+
+    .fetch-btn {
+
+        border: none;
+
+        border-radius: 10px;
+
+        padding: 0 25px;
+
+        background: white;
+
+        color: #111827;
+
+        font-weight: 600;
+
+        transition: 0.25s;
+    }
+
+
+    .fetch-btn:hover {
+
+        transform: translateY(-2px);
+    }
+
+
+    /* BOOK DETAILS */
+
+    .book-details {
+
+        background: rgba(255,255,255,0.06);
+
+        border: 1px solid rgba(255,255,255,0.12);
+
+        border-radius: 18px;
+
+        padding: 30px;
+
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+
+        box-shadow:
+            0 15px 35px rgba(0,0,0,0.25);
+    }
+
+
+    .book-preview {
+
+        display: flex;
+
+        gap: 30px;
+
+        margin-bottom: 30px;
+
+        align-items: center;
+    }
+
+
+    .book-cover {
+
+        width: 160px;
+
+        height: 230px;
+
+        object-fit: cover;
+
+        border-radius: 8px;
+
+        box-shadow:
+            0 10px 25px rgba(0,0,0,0.4);
+    }
+
+
+    .book-information {
+
+        flex: 1;
+    }
+
+
+    .book-information h3 {
+
+        font-size: 27px;
+
+        margin-bottom: 10px;
+    }
+
+
+    .book-information p {
+
+        margin-bottom: 8px;
+
+        color: rgba(255,255,255,0.65);
+    }
+
+
+    .book-information strong {
+
+        color: white;
+    }
+
+
+    /* FORM */
+
+    .form-group-custom {
+
+        margin-bottom: 20px;
+    }
+
+
+    .form-group-custom label {
+
+        display: block;
+
+        margin-bottom: 7px;
+
+        color: rgba(255,255,255,0.7);
+
+        font-size: 14px;
+    }
+
+
+    .custom-input {
+
+        width: 100%;
+
+        height: 46px;
+
+        background: rgba(255,255,255,0.07);
+
+        border: 1px solid rgba(255,255,255,0.15);
+
+        border-radius: 9px;
+
+        color: white;
+
+        padding: 0 14px;
+    }
+
+
+    .custom-input:focus {
+
+        outline: none;
+
+        border-color: rgba(255,255,255,0.4);
+
+        background: rgba(255,255,255,0.10);
+    }
+
+
+    .save-btn {
+
+        width: 100%;
+
+        height: 48px;
+
+        border: none;
+
+        border-radius: 10px;
+
+        background: white;
+
+        color: #111827;
+
+        font-weight: 600;
+
+        transition: 0.25s;
+    }
+
+
+    .save-btn:hover {
+
+        transform: translateY(-2px);
+
+        box-shadow:
+            0 8px 20px rgba(0,0,0,0.25);
+    }
+
+
+    @media (max-width: 600px) {
+
+        .isbn-form {
+
+            flex-direction: column;
+        }
+
+        .fetch-btn {
+
+            height: 45px;
+        }
+
+        .book-preview {
+
+            flex-direction: column;
+
+            text-align: center;
+        }
+
+    }
+
+</style>
+
+
+<div class="container page-container">
+
+    <div class="add-book-container">
+
+
+        <!-- HEADER -->
+
+        <div class="page-heading">
+
+            <h2>📚 Add a New Book</h2>
+
+            <p>
+                Enter an ISBN to automatically fetch book details
+            </p>
+
+        </div>
+
+
+        <!-- ISBN SEARCH -->
+
+        <div class="isbn-card">
+
+            <div class="section-title">
+                🔍 Find Book
+            </div>
+
+
+            <form method="GET" class="isbn-form">
+
+                <input
+                    type="text"
+                    id="isbn"
+                    name="isbn"
+                    class="isbn-input"
+                    placeholder="Enter ISBN (e.g. 9780451524935)"
+                    value="{{ isbn|default:'' }}"
+                    required
+                >
+
+
+                <button
+                    type="submit"
+                    class="fetch-btn">
+
+                    Fetch Details
+
+                </button>
+
+            </form>
+
+        </div>
+
+
+        {% if title %}
+
+
+        <!-- BOOK DETAILS -->
+
+        <div class="book-details">
+
+
+            <div class="section-title">
+                📖 Book Information
+            </div>
+
+
+            <div class="book-preview">
+
+
+                <!-- COVER -->
+
+                {% if cover_url %}
+
+                    <img
+                        src="{{ cover_url }}"
+                        alt="{{ title }}"
+                        class="book-cover">
+
+                {% else %}
+
+                    <div
+                        class="book-cover"
+                        style="
+                        display:flex;
+                        align-items:center;
+                        justify-content:center;
+                        background:rgba(255,255,255,0.05);
+                        font-size:45px;
+                        ">
+
+                        📖
+
+                    </div>
+
+                {% endif %}
+
+
+                <!-- INFORMATION -->
+
+                <div class="book-information">
+
+                    <h3>
+                        {{ title }}
+                    </h3>
+
+
+                    <p>
+                        <strong>Author:</strong>
+                        {{ author }}
+                    </p>
+
+
+                    <p>
+                        <strong>Publisher:</strong>
+                        {{ publisher }}
+                    </p>
+
+
+                    <p>
+                        <strong>Published:</strong>
+                        {{ publish_date }}
+                    </p>
+
+
+                    <p>
+                        <strong>ISBN:</strong>
+                        {{ isbn }}
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <!-- SAVE FORM -->
+
+            <form method="POST">
+
+                {% csrf_token %}
+
+
+                <input
+                    type="hidden"
+                    name="title"
+                    value="{{ title }}"
+                >
+
+
+                <input
+                    type="hidden"
+                    name="author"
+                    value="{{ author }}"
+                >
+
+
+                <input
+                    type="hidden"
+                    name="isbn"
+                    value="{{ isbn }}"
+                >
+
+
+                <input
+                    type="hidden"
+                    name="cover_url"
+                    value="{{ cover_url }}"
+                >
+
+
+                <div class="form-group-custom">
+
+                    <label for="category">
+                        Category
+                    </label>
+
+                    <input
+                        type="text"
+                        id="category"
+                        name="category"
+                        class="custom-input"
+                        placeholder="e.g. Fiction, Programming, Science"
+                        required
+                    >
+
+                </div>
+
+
+                <div class="form-group-custom">
+
+                    <label for="location">
+                        Library Location
+                    </label>
+
+                    <input
+                        type="text"
+                        id="location"
+                        name="location"
+                        class="custom-input"
+                        placeholder="e.g. Shelf A3"
+                        required
+                    >
+
+                </div>
+
+
+                <button
+                    type="submit"
+                    class="save-btn">
+
+                    💾 Save Book
+
+                </button>
+
+
+            </form>
+
+        </div>
+
+
+        {% endif %}
+
+
+    </div>
+
+</div>
+
+{% endblock %}
