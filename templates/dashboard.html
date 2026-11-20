@@ -250,5 +250,58 @@
 
 
 </div>
+<div class="stat-card" style="cursor: default; margin-top: 40px;">
+    <div class="stat-title" style="margin-bottom: 20px;">Borrowing Activity Over Time</div>
+    <div style="height: 300px;">
+        <canvas id="borrowChart"></canvas>
+    </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
+<script>
+const chartTextColor = 'rgba(255,255,255,0.75)';
+const gridColor = 'rgba(255,255,255,0.06)';
+
+<div class="stat-card" style="cursor: default; margin-top: 40px;">
+    <div class="stat-title" style="margin-bottom: 20px;">Borrowing Activity Over Time</div>
+    <div style="height: 300px;">
+        <canvas id="borrowChart"></canvas>
+    </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
+<script>
+const chartTextColor = 'rgba(255,255,255,0.75)';
+const gridColor = 'rgba(255,255,255,0.06)';
+
+new Chart(document.getElementById('borrowChart'), {
+    type: 'line',
+    data: {
+        labels: {{ borrow_labels|safe }},
+        datasets: [{
+            label: 'Books Borrowed',
+            data: {{ borrow_data|safe }},
+            borderColor: '#c99b4a',
+            backgroundColor: 'rgba(201,155,74,0.15)',
+            pointBackgroundColor: '#c99b4a',
+            pointRadius: 5,
+            pointHoverRadius: 7,
+            tension: 0.35,
+            fill: true,
+            borderWidth: 2.5,
+        }]
+    },
+    options: {
+        maintainAspectRatio: false,
+        plugins: { legend: { display: false } },
+        scales: {
+            x: { ticks: { color: chartTextColor }, grid: { display: false } },
+            y: { ticks: { color: chartTextColor, stepSize: 1 }, grid: { color: gridColor }, beginAtZero: true }
+        }
+    }
+});
+</script>
+
+
 
 {% endblock %}

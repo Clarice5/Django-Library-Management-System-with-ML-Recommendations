@@ -1,41 +1,159 @@
 {% extends 'base.html' %}
 
-{% block title %}CONTACT US!{% endblock title %}
+{% block title %}Contact Us{% endblock title %}
 
 {% block body %}
-<div class="container my-4">
-  <!-- Banner Image -->
-  <img src="https://picsum.photos/id/1/1600/500" class="d-block w-100 mb-4 rounded" alt="Banner Image">
-  
-  <!-- Contact Section -->
-  <div class="p-4 shadow-sm rounded" style="background-color: #e9ecef; font-family: Calibri, Arial, sans-serif;">
-    <h3 class="text-center mb-4">Contact Us</h3>
-    
+<style>
+  .contact-hero {
+    position: relative;
+    height: 260px;
+    overflow: hidden;
+  }
+  .contact-hero img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: brightness(0.5);
+  }
+  .contact-hero-overlay {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    padding: 0 4rem;
+    background: linear-gradient(90deg, rgba(28,20,15,0.85) 0%, rgba(28,20,15,0.25) 70%);
+  }
+  .contact-hero-title {
+    font-size: 2.2rem;
+    font-weight: 700;
+    color: #f5ede4;
+  }
+
+  .contact-wrap {
+    max-width: 560px;
+    margin: -60px auto 4rem;
+    padding: 0 1.5rem;
+    position: relative;
+    z-index: 2;
+  }
+
+  .contact-card {
+    background: #2b1d14;
+    border: 1px solid #3f2c1e;
+    border-radius: 14px;
+    padding: 2.2rem 2.2rem 2.5rem;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.35);
+  }
+
+  .contact-card h3 {
+    color: #f5ede4;
+    font-size: 1.4rem;
+    font-weight: 700;
+    margin-bottom: 0.3rem;
+    text-align: center;
+  }
+
+  .contact-card .contact-subtext {
+    color: #b8a893;
+    font-size: 0.9rem;
+    text-align: center;
+    margin-bottom: 1.8rem;
+  }
+
+  .contact-field {
+    margin-bottom: 1.2rem;
+  }
+
+  .contact-field label {
+    display: block;
+    color: #d8c7b0;
+    font-size: 0.85rem;
+    font-weight: 600;
+    margin-bottom: 0.4rem;
+  }
+
+  .contact-field input,
+  .contact-field textarea {
+    width: 100%;
+    background: #1c140f;
+    border: 1px solid #3f2c1e;
+    border-radius: 8px;
+    padding: 0.7rem 0.9rem;
+    color: #f5ede4;
+    font-size: 0.92rem;
+    transition: border-color 0.15s ease;
+  }
+
+  .contact-field input::placeholder,
+  .contact-field textarea::placeholder {
+    color: #6b5644;
+  }
+
+  .contact-field input:focus,
+  .contact-field textarea:focus {
+    outline: none;
+    border-color: #c9a227;
+  }
+
+  .contact-submit-wrap {
+    text-align: center;
+    margin-top: 1.6rem;
+  }
+
+  .contact-submit {
+    background: #c9a227;
+    color: #1c140f;
+    font-weight: 700;
+    font-size: 0.95rem;
+    border: none;
+    border-radius: 999px;
+    padding: 0.75rem 2.4rem;
+    cursor: pointer;
+    transition: background 0.15s ease;
+  }
+
+  .contact-submit:hover {
+    background: #e0b830;
+  }
+</style>
+
+<div class="contact-hero">
+  <img src="https://images.pexels.com/photos/2943603/pexels-photo-2943603.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2" alt="Library reading space">
+  <div class="contact-hero-overlay">
+    <div class="contact-hero-title">Get in touch</div>
+  </div>
+</div>
+
+<div class="contact-wrap">
+  <div class="contact-card">
+    <h3>Contact Us</h3>
+    <div class="contact-subtext">Questions, feedback, or a book request — we'd like to hear it.</div>
+
     <form method="post" action="/contact">
       {% csrf_token %}
-      
-      <div class="mb-3">
-        <label for="name" class="form-label">Name</label>
-        <input type="text" class="form-control rounded-3" id="name" name="name" placeholder="Enter your name">
+
+      <div class="contact-field">
+        <label for="name">Name</label>
+        <input type="text" id="name" name="name" placeholder="Enter your name">
       </div>
 
-      <div class="mb-3">
-        <label for="email" class="form-label">Email address</label>
-        <input type="email" class="form-control rounded-3" id="email" name="email" placeholder="name@example.com">
+      <div class="contact-field">
+        <label for="email">Email address</label>
+        <input type="email" id="email" name="email" placeholder="name@example.com">
       </div>
 
-      <div class="mb-3">
-        <label for="phone" class="form-label">Contact Number</label>
-        <input type="tel" class="form-control rounded-3" id="phone" name="phone" placeholder="Your number">
+      <div class="contact-field">
+        <label for="phone">Contact number</label>
+        <input type="tel" id="phone" name="phone" placeholder="Your number">
       </div>
 
-      <div class="mb-4">
-        <label for="desc" class="form-label">Reason</label>
-        <textarea class="form-control rounded-3" id="desc" name="desc" rows="4" placeholder="How can we help you?"></textarea>
+      <div class="contact-field">
+        <label for="desc">Reason</label>
+        <textarea id="desc" name="desc" rows="4" placeholder="How can we help you?"></textarea>
       </div>
 
-      <div class="text-center">
-        <button type="submit" class="btn btn-primary px-4 py-2 rounded-pill">Submit</button>
+      <div class="contact-submit-wrap">
+        <button type="submit" class="contact-submit">Submit</button>
       </div>
     </form>
   </div>

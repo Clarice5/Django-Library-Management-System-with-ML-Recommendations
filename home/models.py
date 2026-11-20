@@ -28,6 +28,10 @@ class Book(models.Model):
     location=models.CharField(max_length=122)
     status=models.CharField(max_length=10,choices=STATUS_CHOICES,default='available')
     cover_url=models.URLField(blank=True, null=True)
+    recommendation_tags = models.JSONField(
+    default=list,
+    blank=True
+)
     def __str__(self):
         return f"{self.title} by {self.author}"
     
@@ -61,3 +65,65 @@ class Review(models.Model):
     def __str__(self):
         return f"{self.user.username} - {self.book.title}"
 
+class UserPreference(models.Model):
+
+    PACE_CHOICES = [
+        ('fast', 'Fast-paced and intense'),
+        ('slow', 'Slow-paced and thoughtful'),
+        ('emotional', 'Emotional and character-driven'),
+        ('analytical', 'Analytical and idea-driven'),
+        ('mixed', 'A mix of everything'),
+    ]
+
+    FOCUS_CHOICES = [
+        ('mystery', 'Mystery and discovering what happened'),
+        ('characters', 'Characters and relationships'),
+        ('learning', 'Learning something useful'),
+        ('exploring', 'Exploring ideas and different worlds'),
+        ('suspense', 'Suspense, twists and surprises'),
+    ]
+
+    ENDING_CHOICES = [
+        ('happy', 'Satisfying / happy'),
+        ('sad', 'Sad / emotional'),
+        ('thought_provoking', 'Thought-provoking'),
+        ('bittersweet', 'Bittersweet'),
+        ('any', "I don't really care about the ending"),
+    ]
+
+    user = models.OneToOneField(
+        User,
+        on_delete=models.CASCADE
+    )
+
+    pace = models.CharField(
+        max_length=50,
+        choices=PACE_CHOICES
+    )
+
+    reading_focus = models.CharField(
+        max_length=50,
+        choices=FOCUS_CHOICES
+    )
+
+    ending_preference = models.CharField(
+        max_length=50,
+        choices=ENDING_CHOICES
+    )
+
+    genres = models.JSONField(
+        default=list,
+        blank=True
+    )
+
+    selected_books = models.ManyToManyField(
+        Book,
+        blank=True
+    )
+
+    quiz_completed = models.BooleanField(
+        default=False
+    )
+
+    def __str__(self):
+        return f"{self.user.username}'s preferences"

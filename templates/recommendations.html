@@ -1,0 +1,172 @@
+{% extends "base.html" %}
+
+{% block title %}
+Recommended for You
+{% endblock title %}
+
+{% block body %}
+<style>
+  .reco-page {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 2.5rem 1.5rem;
+  }
+
+  .reco-heading {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #f5ede4;
+    margin-bottom: 0.5rem;
+  }
+
+  .reco-subtext {
+    color: #b8a893;
+    margin-bottom: 2rem;
+    font-size: 0.95rem;
+  }
+
+  .fallback-banner {
+    background: #4a3420;
+    border: 1px solid #c9a227;
+    color: #e8d5a8;
+    padding: 0.9rem 1.2rem;
+    border-radius: 8px;
+    margin-bottom: 2rem;
+    font-size: 0.9rem;
+  }
+
+  .reco-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+    gap: 1.5rem;
+  }
+
+  .reco-card {
+    background: #2b1d14;
+    border: 1px solid #3f2c1e;
+    border-radius: 12px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+  }
+
+  .reco-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+    border-color: #c9a227;
+  }
+
+  .reco-cover {
+    width: 100%;
+    height: 260px;
+    object-fit: cover;
+    background: #1c140f;
+  }
+
+  .reco-cover-placeholder {
+    width: 100%;
+    height: 260px;
+    background: linear-gradient(135deg, #3a2a1e, #241811);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #6b5644;
+    font-size: 0.85rem;
+    text-align: center;
+    padding: 1rem;
+  }
+
+  .reco-body {
+    padding: 1rem 1.1rem 1.2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    flex-grow: 1;
+  }
+
+  .reco-title {
+    font-size: 1.05rem;
+    font-weight: 600;
+    color: #f5ede4;
+    line-height: 1.3;
+  }
+
+  .reco-author {
+    font-size: 0.85rem;
+    color: #b8a893;
+  }
+
+  .reco-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    margin-top: 0.4rem;
+  }
+
+  .reco-tag {
+    background: #c9a227;
+    color: #1c140f;
+    font-size: 0.72rem;
+    font-weight: 600;
+    padding: 0.2rem 0.55rem;
+    border-radius: 999px;
+    text-transform: capitalize;
+  }
+
+  .reco-tag.fallback-tag {
+    background: #5a4a3a;
+    color: #e8d5a8;
+  }
+
+  .reco-score {
+    font-size: 0.75rem;
+    color: #8a7561;
+    margin-top: auto;
+    padding-top: 0.5rem;
+  }
+</style>
+
+<div class="reco-page">
+  <div class="reco-heading">Recommended for You</div>
+  <div class="reco-subtext">Based on your reading quiz</div>
+  {% if warmth > 0 %}
+  <div class="reco-subtext">Adapting to your reading history — {{ warmth }} book{{ warmth|pluralize }} borrowed so far.</div>
+{% endif %}
+  {% if used_fallback %}
+    <div class="fallback-banner">
+      We don't have a strong match to your preferences yet — here are some popular picks in the meantime.
+    </div>
+  {% endif %}
+
+  <div class="reco-grid">
+    {% for item in recommendations %}
+      <div class="reco-card">
+        {% if item.book.cover_url %}
+          <img class="reco-cover" src="{{ item.book.cover_url }}" alt="{{ item.book.title }} cover">
+        {% else %}
+          <div class="reco-cover-placeholder">No cover available</div>
+        {% endif %}
+        <div class="reco-body">
+          <div class="reco-title">{{ item.book.title }}</div>
+          <div class="reco-author">{{ item.book.author }}</div>
+
+          {% if item.matched_tags %}
+            <div class="reco-tags">
+              {% for tag in item.matched_tags %}
+                <span class="reco-tag">{{ tag }}</span>
+              {% endfor %}
+            </div>
+          {% else %}
+            <div class="reco-tags">
+              <span class="reco-tag fallback-tag">Popular pick</span>
+            </div>
+          {% endif %}
+
+          <div class="reco-score">{{ item.explanation }}</div>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+</div>
+{% endblock body %}

@@ -19,5 +19,7 @@ urlpatterns = [
      path("dashboard", views.dashboard, name="dashboard"),
      path("my-books/", views.my_books, name="my_books"),
      path("add-review/<int:book_id>/", views.add_review, name="add_review"),
-     path("book-reviews/<int:book_id>/",views.book_reviews,name="book_reviews")
+     path("book-reviews/<int:book_id>/",views.book_reviews,name="book_reviews"),
+     path('quiz/', views.quiz, name='quiz'),
+     path('recommendations/', views.recommendations, name='recommendations')
 ]

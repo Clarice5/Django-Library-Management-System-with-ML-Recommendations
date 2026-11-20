@@ -1,0 +1,274 @@
+{% extends "base.html" %}
+
+{% block title %}
+Reading Quiz
+{% endblock title %}
+
+{% block body %}
+<style>
+  .quiz-wrap {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 3rem 1.5rem 5rem;
+  }
+
+  .quiz-heading {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #f5ede4;
+    margin-bottom: 0.5rem;
+  }
+
+  .quiz-subtext {
+    color: #b8a893;
+    font-size: 0.95rem;
+    margin-bottom: 2.5rem;
+  }
+
+  .quiz-question {
+    background: #2b1d14;
+    border: 1px solid #3f2c1e;
+    border-radius: 12px;
+    padding: 1.6rem 1.8rem;
+    margin-bottom: 1.6rem;
+  }
+
+  .quiz-question-number {
+    display: inline-block;
+    width: 26px;
+    height: 26px;
+    line-height: 26px;
+    text-align: center;
+    background: #c9a227;
+    color: #1c140f;
+    font-weight: 700;
+    font-size: 0.85rem;
+    border-radius: 50%;
+    margin-right: 0.6rem;
+  }
+
+  .quiz-question h4 {
+    color: #f5ede4;
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-bottom: 0.3rem;
+    display: flex;
+    align-items: center;
+  }
+
+  .quiz-question .quiz-hint {
+    color: #8a7561;
+    font-size: 0.85rem;
+    margin: 0 0 1.1rem 2.1rem;
+  }
+
+  .quiz-options {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+    margin-left: 2.1rem;
+  }
+
+  .quiz-option {
+    position: relative;
+  }
+
+  .quiz-option input {
+    position: absolute;
+    opacity: 0;
+    width: 1px;
+    height: 1px;
+  }
+
+  .quiz-option label {
+    display: block;
+    padding: 0.7rem 1rem;
+    background: #1c140f;
+    border: 1px solid #3f2c1e;
+    border-radius: 8px;
+    color: #d8c7b0;
+    font-size: 0.92rem;
+    cursor: pointer;
+    transition: border-color 0.15s ease, background 0.15s ease, color 0.15s ease;
+  }
+
+  .quiz-option label:hover {
+    border-color: #c9a227;
+  }
+
+  .quiz-option input:checked + label {
+    background: #3a2a1a;
+    border-color: #c9a227;
+    color: #f5ede4;
+    font-weight: 600;
+  }
+
+  .quiz-option input:focus-visible + label {
+    outline: 2px solid #c9a227;
+    outline-offset: 2px;
+  }
+
+  .quiz-submit {
+    background: #c9a227;
+    color: #1c140f;
+    font-weight: 700;
+    font-size: 1rem;
+    border: none;
+    border-radius: 8px;
+    padding: 0.85rem 2.2rem;
+    cursor: pointer;
+    transition: background 0.15s ease;
+  }
+
+  .quiz-submit:hover {
+    background: #e0b830;
+  }
+</style>
+
+<div class="quiz-wrap">
+  <div class="quiz-heading">Find Your Reading Preferences</div>
+  <div class="quiz-subtext">Tell us a little about what you enjoy reading, and we'll find books to match.</div>
+
+  <form method="POST">
+    {% csrf_token %}
+
+    <div class="quiz-question">
+      <h4><span class="quiz-question-number">1</span>What kind of reading experience do you prefer?</h4>
+      <div class="quiz-options">
+        <div class="quiz-option">
+          <input type="radio" name="pace" value="fast" id="pace-fast" required>
+          <label for="pace-fast">Fast-paced and intense</label>
+        </div>
+        <div class="quiz-option">
+          <input type="radio" name="pace" value="slow" id="pace-slow">
+          <label for="pace-slow">Slow-paced and thoughtful</label>
+        </div>
+        <div class="quiz-option">
+          <input type="radio" name="pace" value="emotional" id="pace-emotional">
+          <label for="pace-emotional">Emotional and character-driven</label>
+        </div>
+        <div class="quiz-option">
+          <input type="radio" name="pace" value="analytical" id="pace-analytical">
+          <label for="pace-analytical">Analytical and idea-driven</label>
+        </div>
+        <div class="quiz-option">
+          <input type="radio" name="pace" value="mixed" id="pace-mixed">
+          <label for="pace-mixed">A mix of everything</label>
+        </div>
+      </div>
+    </div>
+
+    <div class="quiz-question">
+      <h4><span class="quiz-question-number">2</span>What usually keeps you turning the pages?</h4>
+      <div class="quiz-options">
+        <div class="quiz-option">
+          <input type="radio" name="reading_focus" value="mystery" id="focus-mystery" required>
+          <label for="focus-mystery">Mystery and discovering what happened</label>
+        </div>
+        <div class="quiz-option">
+          <input type="radio" name="reading_focus" value="characters" id="focus-characters">
+          <label for="focus-characters">Characters and relationships</label>
+        </div>
+        <div class="quiz-option">
+          <input type="radio" name="reading_focus" value="learning" id="focus-learning">
+          <label for="focus-learning">Learning something useful</label>
+        </div>
+        <div class="quiz-option">
+          <input type="radio" name="reading_focus" value="exploring" id="focus-exploring">
+          <label for="focus-exploring">Exploring ideas and different worlds</label>
+        </div>
+        <div class="quiz-option">
+          <input type="radio" name="reading_focus" value="suspense" id="focus-suspense">
+          <label for="focus-suspense">Suspense, twists and surprises</label>
+        </div>
+      </div>
+    </div>
+
+    <div class="quiz-question">
+      <h4><span class="quiz-question-number">3</span>Which genres would you like to explore?</h4>
+      <p class="quiz-hint">Select all that apply.</p>
+      <div class="quiz-options">
+        <div class="quiz-option">
+          <input type="checkbox" name="genres" value="Romance" id="genre-romance">
+          <label for="genre-romance">Romance</label>
+        </div>
+        <div class="quiz-option">
+          <input type="checkbox" name="genres" value="Thriller" id="genre-thriller">
+          <label for="genre-thriller">Thriller</label>
+        </div>
+        <div class="quiz-option">
+          <input type="checkbox" name="genres" value="Classics" id="genre-classics">
+          <label for="genre-classics">Classics</label>
+        </div>
+        <div class="quiz-option">
+          <input type="checkbox" name="genres" value="Fantasy" id="genre-fantasy">
+          <label for="genre-fantasy">Fantasy</label>
+        </div>
+        <div class="quiz-option">
+          <input type="checkbox" name="genres" value="Programming" id="genre-programming">
+          <label for="genre-programming">Programming</label>
+        </div>
+        <div class="quiz-option">
+          <input type="checkbox" name="genres" value="AIML Programming" id="genre-aiml">
+          <label for="genre-aiml">AIML Programming</label>
+        </div>
+      </div>
+    </div>
+
+    <div class="quiz-question">
+      <h4><span class="quiz-question-number">4</span>What kind of ending do you usually prefer?</h4>
+      <div class="quiz-options">
+        <div class="quiz-option">
+          <input type="radio" name="ending_preference" value="happy" id="ending-happy" required>
+          <label for="ending-happy">Satisfying / happy</label>
+        </div>
+        <div class="quiz-option">
+          <input type="radio" name="ending_preference" value="sad" id="ending-sad">
+          <label for="ending-sad">Sad / emotional</label>
+        </div>
+        <div class="quiz-option">
+          <input type="radio" name="ending_preference" value="thought_provoking" id="ending-thought">
+          <label for="ending-thought">Thought-provoking</label>
+        </div>
+        <div class="quiz-option">
+          <input type="radio" name="ending_preference" value="bittersweet" id="ending-bittersweet">
+          <label for="ending-bittersweet">Bittersweet</label>
+        </div>
+        <div class="quiz-option">
+          <input type="radio" name="ending_preference" value="any" id="ending-any">
+          <label for="ending-any">I don't really care about the ending</label>
+        </div>
+      </div>
+    </div>
+
+    <div class="quiz-question">
+      <h4><span class="quiz-question-number">5</span>What sounds most like your reason for picking up a book?</h4>
+      <div class="quiz-options">
+        <div class="quiz-option">
+          <input type="radio" name="reason" value="feel" id="reason-feel" required>
+          <label for="reason-feel">I want to feel something</label>
+        </div>
+        <div class="quiz-option">
+          <input type="radio" name="reason" value="learn" id="reason-learn">
+          <label for="reason-learn">I want to learn something</label>
+        </div>
+        <div class="quiz-option">
+          <input type="radio" name="reason" value="solve" id="reason-solve">
+          <label for="reason-solve">I want to solve something</label>
+        </div>
+        <div class="quiz-option">
+          <input type="radio" name="reason" value="explore" id="reason-explore">
+          <label for="reason-explore">I want to explore something</label>
+        </div>
+        <div class="quiz-option">
+          <input type="radio" name="reason" value="mix" id="reason-mix">
+          <label for="reason-mix">A mix of these</label>
+        </div>
+      </div>
+    </div>
+
+    <button type="submit" class="quiz-submit">Continue</button>
+
+  </form>
+</div>
+{% endblock body %}
